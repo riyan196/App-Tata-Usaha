@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Tata Usaha</title>
+  <!-- Link Font Awesome untuk Ikon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      background-color: #343a40;
+      width: 250px;
+      padding: 15px;
+      height: 100vh;
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+    }
+
+    .sidebar .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar .logo {
+      height: 80px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar h1 {
+      font-size: 1.2em;
+      margin: 0;
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+    }
+
+    .sidebar li {
+      margin: 10px 0;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+
+    .submenu a {
+      background-color: #495057;
+      color: #ffffff;
+      font-size: 0.9em;
+    }
+
+    .submenu a:hover {
+      background-color: #6c757d;
+    }
+
+    .submenu {
+      display: none;
+      margin-left: 20px;
+      border-left: 2px solid #6c757d;
+      padding-left: 10px;
+    }
+
+    /* Main Content */
+    main {
+      margin-left: 270px;
+      padding: 20px;
+      flex-grow: 1;
+      background-color: #f8f9fa;
+    }
+
+    .content-header {
+      border-bottom: 2px solid #6c757d;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+
+    .content-header h2 {
+      margin: 0;
+      color: #343a40;
+    }
+
+    .content-body {
+      color: #343a40;
+    }
+
+    /* Profile Dropdown */
+    .profile {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile img {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #6c757d;
+      transition: transform 0.3s ease;
+    }
+
+    .profile img:hover {
+      transform: scale(1.1);
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: white;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+      z-index: 1000;
+    }
+
+    .dropdown a {
+      text-decoration: none;
+      color: #343a40;
+      display: block;
+      margin: 5px 0;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .dropdown a:hover {
+      background-color: #495057;
+      color: white;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #f8f9fa;
+      color: #343a40;
+      text-align: center;
+      padding: 15px;
+      margin-top: auto;
+      width: 100%;
+      box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+      font-size: 0.9em;
+    }
+
+    footer .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    footer a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="logo-container">
+      <img src="https://i.imgur.com/9GtdKZc.png" alt="Logo SMP Negeri 3 Jakarta" class="logo">
+      <h1>Admin Tata Usaha</h1>
+    </div>
+    <ul>
+      <li>
+        <a href="#dashboard" onclick="loadDashboard()">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="#kepegawaian" onclick="toggleMenu('kepegawaian-submenu')">
+          <i class="fas fa-users"></i> Kepegawaian
+        </a>
+        <ul id="kepegawaian-submenu" class="submenu">
+          <li><a href="#data-pegawai" onclick="loadContent('Data Pegawai', 'Informasi detail data pegawai')">Data Pegawai</a></li>
+          <li><a href="#jadwal-kerja" onclick="loadContent('Jadwal Kerja', 'Informasi jadwal kerja pegawai')">Jadwal Kerja</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#kesiswaan" onclick="toggleMenu('kesiswaan-submenu')">
+          <i class="fas fa-user-graduate"></i> Kesiswaan
+        </a>
+        <ul id="kesiswaan-submenu" class="submenu">
+          <li><a href="#data-siswa" onclick="loadContent('Data Siswa', 'Detail data siswa')">Data Siswa</a></li>
+          <li><a href="#prestasi-siswa" onclick="loadContent('Prestasi Siswa', 'Informasi prestasi siswa')">Prestasi Siswa</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#inventaris" onclick="toggleMenu('inventaris-submenu')">
+          <i class="fas fa-box"></i> Inventaris
+        </a>
+        <ul id="inventaris-submenu" class="submenu">
+          <li><a href="#barang" onclick="loadContent('Barang', 'Informasi barang inventaris')">Barang</a></li>
+          <li><a href="#perawatan" onclick="loadContent('Perawatan', 'Detail perawatan barang')">Perawatan</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#sarpras" onclick="toggleMenu('sarpras-submenu')">
+          <i class="fas fa-building"></i> Sarpras
+        </a>
+        <ul id="sarpras-submenu" class="submenu">
+          <li><a href="#ruangan" onclick="loadContent('Ruangan', 'Informasi ruangan yang tersedia')">Ruangan</a></li>
+          <li><a href="#fasilitas" onclick="loadContent('Fasilitas', 'Detail fasilitas pendukung')">Fasilitas</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#persuratan" onclick="toggleMenu('persuratan-submenu')">
+          <i class="fas fa-envelope"></i> Persuratan
+        </a>
+        <ul id="persuratan-submenu" class="submenu">
+          <li><a href="#surat-masuk" onclick="loadContent('Surat Masuk', 'Informasi surat yang diterima')">Surat Masuk</a></li>
+          <li><a href="#surat-keluar" onclick="loadContent('Surat Keluar', 'Detail surat yang dikirim')">Surat Keluar</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <div id="content">
+      <div class="content-header">
+        <h2>Dashboard</h2>
+      </div>
+      <div class="content-body">
+        <p>Selamat datang di Admin Tata Usaha. Gunakan menu di sebelah kiri untuk navigasi.</p>
+        <p><strong>Informasi Statistik:</strong></p>
+        <ul>
+          <li>Jumlah Pegawai: 50</li>
+          <li>Jumlah Siswa: 500</li>
+          <li>Jumlah Barang Inventaris: 200</li>
+        </ul>
+      </div>
+    </div>
+    <div class="profile">
+      <img src="https://via.placeholder.com/40?text=U" alt="Profile Picture" onclick="toggleDropdown()">
+      <div class="dropdown">
+        <a href="#" onclick="logout()">Keluar</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <span>&copy; 2024 Admin Tata Usaha. All Rights Reserved.</span>
+      <span>Powered by <a href="#">Riyan Heriyanto</a></span>
+    </div>
+  </footer>
+
+  <script>
+ const profileDropdown = document.querySelector('.dropdown');
+
+function toggleDropdown() {
+  profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener('click', function (event) {
+  if (!event.target.closest('.profile')) {
+    profileDropdown.style.display = 'none';
+  }
+});
+
+function loadContent(title, content) {
+  const contentHeader = document.querySelector('.content-header h2');
+  const contentBody = document.querySelector('.content-body');
+
+  contentHeader.innerText = title;
+  contentBody.innerHTML = `<p>${content}</p>`;
+}
+
+function loadDashboard() {
+  const contentHeader = document.querySelector('.content-header h2');
+  const contentBody = document.querySelector('.content-body');
+
+  contentHeader.innerText = "Dashboard";
+  contentBody.innerHTML = `
+    <p>Selamat datang di Admin Tata Usaha. Gunakan menu di sebelah kiri untuk navigasi.</p>
+    <p><strong>Informasi Statistik:</strong></p>
+    <ul>
+      <li>Jumlah Pegawai: 50</li>
+      <li>Jumlah Siswa: 500</li>
+      <li>Jumlah Barang Inventaris: 200</li>
+    </ul>
+  `;
+}
+
+function toggleMenu(menuId) {
+  const submenu = document.getElementById(menuId);
+  const allSubmenus = document.querySelectorAll('.submenu');
+  allSubmenus.forEach(menu => {
+    if (menu !== submenu) menu.style.display = 'none';
+  });
+  submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Fungsi untuk logout dan redirect ke halaman login
+function logout() {
+  // Hapus data sesi atau login (jika menggunakan localStorage/sessionStorage)
+  localStorage.removeItem('username'); // Misalnya menyimpan username di localStorage
+  sessionStorage.clear(); // Clear session storage jika ada
+
+  alert('Anda telah keluar!');
+  
+  // Redirect ke halaman login
+  window.location.href = "index.html"; // Pastikan login.html berada di folder yang tepat
+}
+
+  </script>
+</body>
+</html>
